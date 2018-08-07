@@ -52,10 +52,23 @@ def make_new_student(first_name, last_name, github):
 
     db.session.commit()
 
+    print ("Yay! New student was added - {} {}".format(first_name, last_name))
+
 
 def get_project_by_title(title):
     """Given a project title, print information about the project."""
-    pass
+    
+    QUERY = """
+        SELECT title, description, max_grade
+        FROM grades
+        WHERE title = :title
+        """
+
+    db_cursor = db.session.execute(QUERY, {'title': title})
+
+    db.session.commit()
+
+    print ("The best project was {}, which is about {} and received a grade of {}".format(title, description, max_grade))
 
 
 def get_grade_by_github_title(github, title):
@@ -99,7 +112,7 @@ def handle_input():
 if __name__ == "__main__":
     connect_to_db(app)
 
-    # handle_input()
+    handle_input()
 
     # To be tidy, we close our database connection -- though,
     # since this is where our program ends, we'd quit anyway.
